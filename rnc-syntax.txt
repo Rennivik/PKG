@@ -1,0 +1,130 @@
+MAIN.RNC
+
+#get util/Logger
+#get util/Math
+
+class Player {
+    str name;
+    I32 health;
+
+    Player(str name, I32 health) {
+        this.name = name;
+        this.health = health;
+    }
+
+    void takeDamage(I32 damage) {
+        this.health -= damage;
+
+        if (this.health <= 0) {
+            lnout(`{this.name} has been defeated!`);
+        }
+    }
+
+    void heal(I32 amount) {
+        this.health += amount;
+        lnout(`{this.name} healed by {amount}`);
+    }
+
+    void status() {
+        lnout(`Player: {this.name}`);
+        lnout(`Health: {this.health}`);
+    }
+}
+
+void printSeparator() {
+    lnout("--------------------------");
+}
+
+I32 main() {
+    Logger logger = Logger("GameLogger");
+
+    logger.info("Starting game");
+
+    Player player = Player("Renn", 100);
+
+    player.status();
+    printSeparator();
+
+    for (I32 index = 1; index <= 5; index++) {
+        lnout(`Turn {index}`);
+
+        player.takeDamage(10);
+        player.status();
+
+        printSeparator();
+    }
+
+    player.heal(25);
+    player.status();
+
+    logger.info("Game finished");
+
+    return 0;
+}
+
+UTIL/LOGGER.RNC
+#className Logger
+#description Provides logging functionality
+#constructor (str id)
+
+class Logger {
+    str id;
+
+    Logger(str id) {
+        this.id = id;
+    }
+
+    void log(str prefix, str message) {
+        lnout(`[{prefix}] {message}`);
+    }
+
+    void info(str message) {
+        this.log("INFO", message);
+    }
+
+    void warn(str message) {
+        this.log("WARN", message);
+    }
+
+    void error(str message) {
+        this.log("ERROR", message);
+    }
+}
+
+export Logger
+
+UTIL/MATH.RNC
+#description Basic mathematical utilities
+
+I32 square(I32 number) {
+    return number * number;
+}
+
+I32 maximum(I32 a, I32 b) {
+    if (a > b) {
+        return a;
+    }
+
+    return b;
+}
+
+I32 minimum(I32 a, I32 b) {
+    if (a < b) {
+        return a;
+    }
+
+    return b;
+}
+
+I32 absolute(I32 number) {
+    if (number < 0) {
+        return -number;
+    }
+
+    return number;
+}
+
+export square
+export maximum
+export minimum
+export absolute
